@@ -8,34 +8,34 @@ typealias StorageCallback = (Any?) -> Void
 typealias StorageError = (String, String?, Any?) -> Any
 
 struct StorageMethodCall {
-	let method: String
-	let arguments: Any?
+       let method: String
+       let arguments: Any?
 }
 
 class InitOptions {
-	init(params: [String: Any]) {
-		darwinTouchIDAuthenticationAllowableReuseDuration = params["darwinTouchIDAuthenticationAllowableReuseDurationSeconds"] as? Int
-		darwinTouchIDAuthenticationForceReuseContextDuration = params["darwinTouchIDAuthenticationForceReuseContextDurationSeconds"] as? Int
-		authenticationRequired = params["authenticationRequired"] as? Bool
-		darwinBiometricOnly = params["darwinBiometricOnly"] as? Bool
-	}
-	let darwinTouchIDAuthenticationAllowableReuseDuration: Int?
-	let darwinTouchIDAuthenticationForceReuseContextDuration: Int?
-	let authenticationRequired: Bool!
-	let darwinBiometricOnly: Bool!
+       init(params: [String: Any]) {
+		 darwinTouchIDAuthenticationAllowableReuseDuration = params["darwinTouchIDAuthenticationAllowableReuseDurationSeconds"] as? Int
+		 darwinTouchIDAuthenticationForceReuseContextDuration = params["darwinTouchIDAuthenticationForceReuseContextDurationSeconds"] as? Int
+		 authenticationRequired = params["authenticationRequired"] as? Bool
+		 darwinBiometricOnly = params["darwinBiometricOnly"] as? Bool
+       }
+       let darwinTouchIDAuthenticationAllowableReuseDuration: Int?
+       let darwinTouchIDAuthenticationForceReuseContextDuration: Int?
+       let authenticationRequired: Bool!
+       let darwinBiometricOnly: Bool!
 }
 
 class IOSPromptInfo {
-	init(params: [String: Any]) {
-		saveTitle = params["saveTitle"] as? String
-		accessTitle = params["accessTitle"] as? String
-	}
-	let saveTitle: String!
-	let accessTitle: String!
+       init(params: [String: Any]) {
+		 saveTitle = params["saveTitle"] as? String
+		 accessTitle = params["accessTitle"] as? String
+       }
+       let saveTitle: String!
+       let accessTitle: String!
 }
 
 private func hpdebug(_ message: String) {
-	print(message);
+       print(message);
 }
 
 class BiometricStorageImpl {
