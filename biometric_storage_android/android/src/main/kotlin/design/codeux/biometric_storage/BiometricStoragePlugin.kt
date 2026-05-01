@@ -352,9 +352,9 @@ class BiometricStoragePlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
         }
         val response = biometricManager.canAuthenticate(
             if (initOptions.androidBiometricOnly) {
-                BIOMETRIC_STRONG or BIOMETRIC_WEAK
+                BIOMETRIC_STRONG
             } else {
-                DEVICE_CREDENTIAL or BIOMETRIC_STRONG or BIOMETRIC_WEAK
+                DEVICE_CREDENTIAL or BIOMETRIC_STRONG
             }
         )
         return CanAuthenticateResponse.values().firstOrNull { it.code == response }

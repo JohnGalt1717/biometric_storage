@@ -698,6 +698,67 @@ void main() {
       ),
     );
   });
+
+  test(
+    'maps linux app armor platform errors from message to AuthException',
+    () async {
+      final errorPlatform = ErrorTransformingBiometricStoragePlatform();
+
+      await expectLater(
+        errorPlatform.transformErrors(
+          Future<String?>.error(
+            PlatformException(
+              code: 'SecurityError',
+              message:
+                  'org.freedesktop.DBus.Error.AccessDenied: AppArmor denied',
+              details: <String, Object?>{'other': 'value'},
+            ),
+          ),
+        ),
+        throwsA(
+          isA<AuthException>()
+              .having(
+                (exception) => exception.code,
+                'code',
+                AuthExceptionCode.linuxAppArmorDenied,
+              )
+              .having(
+                (exception) => exception.message,
+                'message',
+                'org.freedesktop.DBus.Error.AccessDenied: AppArmor denied',
+              ),
+        ),
+      );
+    },
+  );
+
+  test(
+    'preserves original platform errors when message is not AppArmor-related',
+    () async {
+      final errorPlatform = ErrorTransformingBiometricStoragePlatform();
+
+      await expectLater(
+        errorPlatform.transformErrors(
+          Future<String?>.error(
+            PlatformException(
+              code: 'SecurityError',
+              message: 'Original platform failure',
+              details: <String, Object?>{'other': 'value'},
+            ),
+          ),
+        ),
+        throwsA(
+          isA<PlatformException>()
+              .having((error) => error.code, 'code', 'SecurityError')
+              .having(
+                (error) => error.message,
+                'message',
+                'Original platform failure',
+              ),
+        ),
+      );
+    },
+  );
 }
 
 class ErrorTransformingBiometricStoragePlatform

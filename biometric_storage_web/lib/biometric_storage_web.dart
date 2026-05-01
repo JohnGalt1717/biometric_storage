@@ -874,7 +874,7 @@ class _StoredCredentialRecord {
       version: version,
       credentialIdBase64: credentialIdBase64,
       prfSaltBase64: prfSaltBase64,
-      ciphertextBase64: ciphertextBase64,
+      ciphertextBase64: ciphertextBase64 ?? this.ciphertextBase64,
     );
   }
 

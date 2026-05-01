@@ -128,19 +128,17 @@ abstract class MethodChannelBiometricStoragePlatform
               stackTrace,
             );
           }
-          if (error.details is Map) {
-            final message = error.details['message'] as String;
-            if (message.contains('org.freedesktop.DBus.Error.AccessDenied') ||
-                message.contains('AppArmor')) {
-              logger.fine('Got app armor error.');
-              return Future<T>.error(
-                AuthException(
-                  AuthExceptionCode.linuxAppArmorDenied,
-                  error.message ?? 'Unknown error',
-                ),
-                stackTrace,
-              );
-            }
+          final message = error.message ?? '';
+          if (message.contains('org.freedesktop.DBus.Error.AccessDenied') ||
+              message.contains('AppArmor')) {
+            logger.fine('Got app armor error.');
+            return Future<T>.error(
+              AuthException(
+                AuthExceptionCode.linuxAppArmorDenied,
+                error.message ?? 'Unknown error',
+              ),
+              stackTrace,
+            );
           }
         }
         return Future<T>.error(error, stackTrace);

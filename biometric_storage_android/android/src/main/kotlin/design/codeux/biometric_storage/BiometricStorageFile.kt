@@ -29,8 +29,8 @@ class BiometricStorageFile(
 
     companion object {
         private const val DIRECTORY_NAME = "biometric_storage"
-        private const val FILE_SUFFIX_V2 = ".v2.txt"
-        private const val ENCODED_FILE_NAME_PREFIX = "_encoded_"
+        internal const val FILE_SUFFIX_V2 = ".v2.txt"
+        internal const val ENCODED_FILE_NAME_PREFIX = "_encoded_"
     }
 
     private val masterKeyName = "${baseName}_master_key"
@@ -55,21 +55,7 @@ class BiometricStorageFile(
         validateOptions()
     }
 
-    private fun buildFileName(baseName: String): String {
-        val fileComponent = sanitizeFileComponent(baseName)
-        return "$fileComponent$FILE_SUFFIX_V2"
-    }
-
-    private fun sanitizeFileComponent(baseName: String): String {
-        if (!baseName.contains('/') && !baseName.contains('\\')) {
-            return baseName
-        }
-
-        val encoded = baseName.toByteArray(UTF_8).joinToString(separator = "") {
-            "%02x".format(it)
-        }
-        return "$ENCODED_FILE_NAME_PREFIX$encoded"
-    }
+    private fun buildFileName(baseName: String): String = androidStorageFileName(baseName)
 
     private fun validateOptions() {
         if (options.androidAuthenticationValidityDuration == null && !options.androidBiometricOnly) {
@@ -179,13 +165,13 @@ class BiometricStorageFile(
 
 internal fun androidStorageFileName(baseName: String): String {
     if (!baseName.contains('/') && !baseName.contains('\\')) {
-        return "$baseName.v2.txt"
+        return "$baseName${BiometricStorageFile.FILE_SUFFIX_V2}"
     }
 
     val encoded = baseName.toByteArray(UTF_8).joinToString(separator = "") {
         "%02x".format(it)
     }
-    return "_encoded_$encoded.v2.txt"
+    return "${BiometricStorageFile.ENCODED_FILE_NAME_PREFIX}$encoded${BiometricStorageFile.FILE_SUFFIX_V2}"
 }
 
 internal inline fun <T> retryWithoutStrongBoxIfNeeded(
